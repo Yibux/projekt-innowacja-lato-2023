@@ -684,6 +684,14 @@
         <layout>Order-Order Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>Person__c-Doctor Layout</layout>
+        <recordType>Person__c.Doctor</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Person__c-Patient Layout</layout>
+        <recordType>Person__c.Patient</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>Person__c-Person Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
