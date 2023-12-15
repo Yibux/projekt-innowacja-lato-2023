@@ -8,10 +8,6 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Personal_ID_Number__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
@@ -92,9 +88,6 @@
         <layoutColumns />
         <style>CustomLinks</style>
     </layoutSections>
-    <miniLayout>
-        <fields>Personal_ID_Number__c</fields>
-    </miniLayout>
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Prescription__c.Doctor__c</relatedList>
