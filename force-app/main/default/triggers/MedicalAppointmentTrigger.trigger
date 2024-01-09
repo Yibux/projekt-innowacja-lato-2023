@@ -3,9 +3,7 @@ trigger MedicalAppointmentTrigger on Medical_Appointment__c(
   after insert,
   after update
 ) {
-  MedicalAppointmentTriggerHandler handler = new MedicalAppointmentTriggerHandler(
-    Trigger.isInsert
-  );
+  MedicalAppointmentTriggerHandler handler = new MedicalAppointmentTriggerHandler();
   if (Trigger.isInsert) {
     if (Trigger.isBefore) {
       handler.firstVisitToAnInternistOnSite(Trigger.new);
