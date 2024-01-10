@@ -45,7 +45,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Medical_Insurence__c.Insurence_Id__c</field>
+        <field>Medical_Insurance__c.Insurance_Id__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -83,7 +83,7 @@
         <layout>Medical_Facility__c-Medical Facility Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Medical_Insurence__c-Medical Insurence Layout</layout>
+        <layout>Medical_Insurance__c-Medical Insurance Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Person__c-Doctor Layout</layout>
@@ -123,7 +123,7 @@
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>true</modifyAllRecords>
-        <object>Medical_Insurence__c</object>
+        <object>Medical_Insurance__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -173,7 +173,7 @@
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
-        <tab>Medical_Insurence__c</tab>
+        <tab>Medical_Insurance__c</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
