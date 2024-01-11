@@ -1,25 +1,40 @@
-trigger InsurenceCheck on Medical_Appointment__c (before insert,before update) {
 
-    Set<String> patientInsured = new Set<String>();
-    for(Medical_Insurance__c insurance : [SELECT Insured_Person__r.Name, Insured_Person__r.Last_Name__c FROM Medical_Insurance__c]) { 
-        patientInsured.add(insurance.Insured_Person__r.Name + ' ' + insurance.Insured_Person__r.Last_Name__c);
-    }
+trigger InsurenceCheck on Medical_Appointment__c (after insert,after update) {
+   List<Medical_Appointment__c> newAppointments = [ 
+       SELECT Patient__c
+       FROM Medical_Appointment__c
+       WHERE (Id IN :Trigger.new 
+       AND Medical_Facility__r.Type__c = 'hospital' )
+   ];
 
-	Set<String> patientNames = new Set<String>();
-    for(Medical_Appointment__c appointment : [SELECT Medical_Appointment__c.Patient__r.Name,Medical_Appointment__c.Patient__r.Last_Name__c 
-    FROM Medical_Appointment__c WHERE Medical_Appointment__c.Medical_Facility__r.Type__c = 'Hospital']) {
-            patientNames.add(appointment.Patient__r.Name + ' ' + appointment.Patient__r.Last_Name__c);
-            for(String patient : patientInsured) {
-                if (!patientnames.contains(patient)) {
-                    
-                    appointment.addError('You can\'t add patient without Insurance to the appointment in Hospital facility!');
-                }
-            }
-    }
-    
+   Set<Id> patientIds = new Set<Id>();
+   for (Medical_Appointment__c appointment : newAppointments) {
+       patientIds.add(appointment.Patient__c);  
+   }
+
+   List<Medical_Insurence__c> newInsurances=[
+    SELECT Insured_Person__c
+    FROM Medical_Insurence__c
+    WHERE Insured_Person__c IN :patientIds
+   ];
    
+   Set<Id> insuredPatients = new Set<Id>();
+   for (Medical_Insurence__c insurance : newInsurances) {
+       insuredPatients.add(insurance.Insured_Person__c);
+   }
 
-    
+   if( insuredPatients.IsEmpty() && !patientIds.IsEmpty()){
+    for (Medical_Appointment__c appointment : Trigger.new) {
+        appointment.addError('Cannot add patient without insurance!');
+    }
+   }else{
+   for (Medical_Appointment__c appointment : newAppointments) {
 
-
+       if (!insuredPatients.contains(appointment.Patient__c)  ) { 
+           appointment.addError('Cannot add patient without insurance!');
+       }
+   }}
 }
+
+
+   
