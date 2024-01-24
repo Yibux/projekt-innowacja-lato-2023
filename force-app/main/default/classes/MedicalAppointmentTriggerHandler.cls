@@ -20,7 +20,6 @@ public with sharing class MedicalAppointmentTriggerHandler {
           continue;
         }
       }
-
       if (!patientAppointments.containsKey(appointment.Patient__c)) {
         patientAppointments.put(
           appointment.Patient__c,
