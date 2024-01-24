@@ -1,12 +1,11 @@
 public with sharing class MedicalAppointmentTriggerHandler {
   public void sendAppointmentEmail(
     List<Medical_Appointment__c> triggerNew,
-    Boolean isUpdate,
     Map<Id, Medical_Appointment__c> oldMap
   ) {
     Map<Id, List<Medical_Appointment__c>> patientAppointments = new Map<Id, List<Medical_Appointment__c>>();
     for (Medical_Appointment__c appointment : triggerNew) {
-      if (isUpdate) {
+      if (oldMap != null) {
         Medical_Appointment__c old = oldMap.get(appointment.Id);
         if (
           old.Name == appointment.Name &&
@@ -76,12 +75,16 @@ public with sharing class MedicalAppointmentTriggerHandler {
       .getRecordTypeInfosByName()
       .get('Online')
       .getRecordTypeId();
+    List<Id> doctors = new List<Id>();
+    for (Medical_Appointment__c appointment : triggerNew) {
+      doctors.add(appointment.Doctor__c);
+    }
 
     List<Id> internistsIds = new List<Id>();
     List<Person__c> internists = [
       SELECT Id
       FROM Person__c
-      WHERE Specialization__c = 'Internist'
+      WHERE Specialization__c = 'Internist' AND Id IN :doctors
     ];
     for (Person__c internist : internists) {
       internistsIds.add(internist.Id);
@@ -100,15 +103,18 @@ public with sharing class MedicalAppointmentTriggerHandler {
     }
 
     List<Id> patientsIds = new List<Id>();
-    List<Medical_Appointment__c> appointmentsWithInternists = [
-      SELECT Id, Patient__c
+    List<AggregateResult> appointmentsWithInternists = [
+      SELECT COUNT(Id), Patient__c
       FROM Medical_Appointment__c
       WHERE
         Doctor__r.Specialization__c = 'Internist'
         AND Patient__c IN :patients
+        AND RecordTypeId != :recType
+      GROUP BY Patient__c
     ];
-    for (Medical_Appointment__c appointment : appointmentsWithInternists) {
-      patientsIds.add(appointment.Patient__c);
+
+    for (AggregateResult ar : appointmentsWithInternists) {
+      patientsIds.add(ar.get('Patient__c').toString());
     }
 
     for (Medical_Appointment__c appointment : appointments) {
